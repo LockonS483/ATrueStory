@@ -58,7 +58,8 @@ public class GameManager : MonoBehaviour
         inCombat = false;
         visitedNodes = new Vector3[10];
         lr = GetComponent<LineRenderer>();
-        GlobalVars.money += 100;
+        GlobalVars.money = 100;
+        GlobalVars.currentLayer = 0;
     }
 
     // Update is called once per frame
