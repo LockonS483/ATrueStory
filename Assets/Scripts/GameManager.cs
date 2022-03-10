@@ -17,11 +17,23 @@ public class GameManager : MonoBehaviour
     private char whichMenu = 'u'; // u = upgrade menu, s = shop menu
 
     public Ship[] enemyShips; //S, M, L ship prefabs.
+    public Ship[] playerShips; //S, M, L ship prefabs.
     Vector3[] visitedNodes;
     Vector3 nodePosOffset = new Vector3(0, 0, 0.05f);
 
     int cEnemyCount;
     LineRenderer lr;
+
+    public GameObject playerFleetObject;
+
+    public int laserUp;
+    public int missileUp;
+    public int healthUp;
+
+    [Header("Event stuff")]
+    public GameObject[] eventPrefabs;
+    public float eventChance;
+    public Transform eventLocation;
 
     // Start is called before the first frame update
     void Start()
@@ -82,6 +94,18 @@ public class GameManager : MonoBehaviour
                 s.InitCombat();
                 cEnemyCount++;
             }
+
+            //apply upgrades
+            foreach(ShipLaser s in playerFleetObject.GetComponentsInChildren<ShipLaser>()){
+                s.upgradeLevel = laserUp;
+            }
+            foreach(ShipMissileArray s in playerFleetObject.GetComponentsInChildren<ShipMissileArray>()){
+                s.upgradeLevel = missileUp;
+            }
+            foreach(Ship s in playerFleetObject.GetComponentsInChildren<Ship>()){
+                s.hitpoints += healthUp;
+                s.cHitpoints = s.hitpoints;
+            }
         // if shop node (menu has to be set at runtime)
         } else if (node.nodeType == MapNode.NodeType.Shop){
             inMenu = true;
@@ -131,9 +155,35 @@ public class GameManager : MonoBehaviour
         foreach(GameObject p in pfleetGo){
             p.transform.position = Vector3.zero;
             Ship s = p.GetComponent<Ship>();
-            s.hitpoints += 4;
+            s.hitpoints += 10;
+            s.cHitpoints = s.hitpoints;
+        }
+
+        foreach(Ship s in playerFleetObject.GetComponentsInChildren<Ship>()){
+            s.hitpoints -= healthUp;
             s.cHitpoints = s.hitpoints;
         }
         inCombat = false;
+        FinishNode();
+    }
+
+    public void FinishNode(){
+        inCombat = false;
+        inMenu = false;
+
+        //event stuff
+        float roll = Random.Range(0f, 100f);
+        if(roll <= eventChance){
+            int eventind = Random.Range(0, eventPrefabs.Length);
+            Instantiate(eventPrefabs[eventind], eventLocation.position, eventLocation.rotation);
+        }
+    }
+
+    //0 for small, 1 for m, anything larger for large
+    public void SpawnPlayerShip(int s){
+        if(s <= 2){
+            Ship g = Instantiate(playerShips[s], Vector3.zero, Quaternion.identity);
+            g.transform.parent = playerFleetObject.transform;
+        }
     }
 }

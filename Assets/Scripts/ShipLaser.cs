@@ -7,13 +7,11 @@ public class ShipLaser : MonoBehaviour
     public Ship ship;
     public float fireCooldown = 1f;
     float cFireCooldown;
-
     public Laser laser;
-
     public Transform[] firePoints;
     public Color color;
-
     public int damage;
+    public int upgradeLevel;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +37,7 @@ public class ShipLaser : MonoBehaviour
             t.Initialize(f.position, ship.target.transform.position, color);
         }
 
-        ship.target.DealDamage(damage);
+        ship.target.DealDamage(damage + (upgradeLevel*5));
 
         cFireCooldown = fireCooldown;
     }

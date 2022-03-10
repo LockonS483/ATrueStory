@@ -119,7 +119,7 @@ public class MapGenerator : MonoBehaviour
         parentLayer.mapNodes[layerIndex].GetComponent<MapNode>().mapLayer = thisLayer;
         
         int battleScore = 0;
-        int targetScore = Mathf.FloorToInt(cDifficulty * 5f);
+        int targetScore = Mathf.FloorToInt(cDifficulty * 8f);
         print("generating " + cDifficulty.ToString());
         float gentotal = smallShipWeight + mediumShipWeight + largeShipWeight;
         while(battleScore < targetScore){

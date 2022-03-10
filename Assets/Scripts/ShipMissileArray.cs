@@ -11,6 +11,7 @@ public class ShipMissileArray : MonoBehaviour
     public Transform[] firePoints;
     float cFireCooldown;
     Ship ship;
+    public int upgradeLevel;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +34,7 @@ public class ShipMissileArray : MonoBehaviour
     }
 
     public void Fire(){
-        for(int i = 0; i < missileCount; i++){
+        for(int i = 0; i < (missileCount+upgradeLevel); i++){
             foreach(Transform fp in firePoints){
                 StartCoroutine(ShootMissile(i * swarmDelay, fp));
             }
