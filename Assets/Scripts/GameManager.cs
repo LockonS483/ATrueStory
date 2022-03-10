@@ -51,6 +51,17 @@ public class GameManager : MonoBehaviour
 
     public string loseSceneName = "LoseScene";
 
+    // For bgms
+    private AudioSource[] bgms;
+    private AudioSource combatBGM;
+    private AudioSource exploreBGM;
+
+    
+    private bool playCombat = false;
+    private bool playExplore = false;
+    private bool combatPlaedOnce = false;
+    private bool explorePlayedOnce = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,6 +71,16 @@ public class GameManager : MonoBehaviour
         lr = GetComponent<LineRenderer>();
         GlobalVars.money = 100;
         GlobalVars.currentLayer = 0;
+        bgms = this.GetComponents<AudioSource>();
+        exploreBGM = bgms[0];
+        combatBGM = bgms[1];
+        combatPlaedOnce = false;
+        explorePlayedOnce = false;
+
+        playCombat = false;
+        playExplore = false;
+
+
     }
 
     // Update is called once per frame
@@ -77,6 +98,24 @@ public class GameManager : MonoBehaviour
 
             transform.position = Vector3.Lerp(transform.position, battleCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, battleCam.rotation, 0.05f);
+
+            Debug.Log("play combat");
+            if (!combatPlaedOnce)
+            {
+                
+                playCombat = true;
+            }
+            
+
+            if (playCombat && !combatPlaedOnce)
+            {
+                playCombat = false;
+                combatPlaedOnce = true;
+                explorePlayedOnce = false;
+                exploreBGM.Stop();
+                combatBGM.Play();
+            }
+            
         // Menu Node
         } else if (inMenu){
             StartCoroutine(LerpFirst());
@@ -87,6 +126,8 @@ public class GameManager : MonoBehaviour
 
             transform.position = Vector3.Lerp(transform.position, menuCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, menuCam.rotation, 0.05f);
+
+            
         
         // Map view
         }else{
@@ -99,6 +140,21 @@ public class GameManager : MonoBehaviour
 
             transform.position = Vector3.Lerp(transform.position, mapCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, mapCam.rotation, 0.05f);
+
+            Debug.Log("play explore");
+            if (!explorePlayedOnce)
+            {
+                playExplore = true;
+            }
+
+            if (playExplore && !explorePlayedOnce)
+            {
+                playExplore = false;
+                explorePlayedOnce = true;
+                combatPlaedOnce = false;
+                combatBGM.Stop();
+                exploreBGM.Play();
+            }
         }
     }
 
