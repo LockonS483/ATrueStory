@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2457905868869713318}
   - component: {fileID: 2457905868869713314}
   - component: {fileID: 2457905868869713315}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Node 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 7528397817347780845}
   - component: {fileID: 6905679007666683720}
   - component: {fileID: 8660722464097618818}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: _Orbital_structure_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 1467997232747704129}
   - component: {fileID: 7937322837416348550}
   - component: {fileID: 8178630605453850786}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -289,7 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1686819966457361712}
   - component: {fileID: 7831167913476813057}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}

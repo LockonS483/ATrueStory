@@ -282,4 +282,8 @@ public class GameManager : MonoBehaviour
             FinishNode();
         }
     }
+
+    public void CloseMenu(){
+        FinishNode();
+    }
 }
