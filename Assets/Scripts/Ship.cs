@@ -1,13 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Ship : MonoBehaviour
 {
-    public enum MovementType {Map, Target};
-    public int hitpoints;
-    public int cHitpoints;
-    public enum Team {player, enemy};
+    public enum MovementType { Map, Target };
+    //maxVal
+    public float hitpoints;
+    //MaxValue
+    public float HitPoints { get; set; }
+    //currentVal
+    public float cHitpoints;
+    //CurrentVal
+    public float CHitPoint
+    {
+        get
+        {
+            return cHitpoints;
+        }
+        set
+        {
+            this.cHitpoints = Mathf.Clamp(value, 0, HitP);
+            hp = cHitpoints;
+        }
+    }
+    //MaxVal
+    public float HitP
+    {
+        get
+        {
+            return hitpoints;
+        }
+        set
+        {
+            hitpoints = value;
+            HitPoints = hitpoints;
+        }
+    }
+
+    //Value
+    public float hp
+    {
+        set
+        {
+            fillAmount = map(value, 0, HitPoints, 0, 1);
+        }
+    }
+    public enum Team { player, enemy };
     public Team team;
     public MovementType movementType;
     public Vector2 angleSpeedRange; //MAP movement only
@@ -17,13 +58,17 @@ public class Ship : MonoBehaviour
     public Vector2 moveRadiusRange;
     public float moveRadius;
     public float targetAngle = 0;
-    public enum ShipType {Fighter, MFighter, Cruiser};
+    public enum ShipType { Fighter, MFighter, Cruiser };
     public ShipType whoAmI;
 
     public Ship target;
 
     public GameObject[] explosions;
-    
+    public Image healthFill;
+    private float fillAmount;
+
+
+
 
     TrailRenderer tr;
     float otime;
@@ -34,23 +79,30 @@ public class Ship : MonoBehaviour
     void Start()
     {
         //InitCombat();
-        //tr.time = otime;
+        //tr.time = otime
+        this.HitP = hitpoints;
+        this.CHitPoint = cHitpoints;
+
     }
 
-    public void InitCombat(){
+    public void InitCombat()
+    {
         tr = GetComponent<TrailRenderer>();
         otime = tr.time;
         tr.time = 0;
         Invoke("ResetTrail", 0.5f);
         moveRadius = Random.Range(moveRadiusRange.x, moveRadiusRange.y);
-        if(movementType == MovementType.Map){
+        if (movementType == MovementType.Map)
+        {
             targetAngle = Random.Range(0, Mathf.PI);
             angleSpeed = Random.Range(angleSpeedRange.x, angleSpeedRange.y);
             Vector3 startPos = Vector3.zero;
             startPos.y = Random.Range(-10f, 10f);
             transform.position = startPos;
             transform.position = CalculatePos(targetAngle);
-        }else if(movementType == MovementType.Target){
+        }
+        else if (movementType == MovementType.Target)
+        {
             Vector3 startPos = Random.insideUnitSphere * moveRadius;
             startPos.y = 0f;
             transform.position = startPos;
@@ -62,26 +114,35 @@ public class Ship : MonoBehaviour
     void Update()
     {
         MoveUpdate();
-        
+
     }
 
-    void MoveUpdate(){
-        if(target == null){
-            if(GetNewTarget() != 0){
+    void MoveUpdate()
+    {
+        if (target == null)
+        {
+            if (GetNewTarget() != 0)
+            {
                 return;
             }
         }
-        if(movementType == MovementType.Map){
+        if (movementType == MovementType.Map)
+        {
             targetAngle += angleSpeed * Time.deltaTime;
             transform.position = CalculatePos(targetAngle);
 
             transform.LookAt(Vector3.zero);
             transform.Rotate(0, 90, 0);
-        }else if(movementType == MovementType.Target){
+        }
+        else if (movementType == MovementType.Target)
+        {
             float d = Vector3.Distance(transform.position, target.transform.position);
-            if(d >= moveRadius){
+            if (d >= moveRadius)
+            {
                 angleSpeed = turnSpeed.y;
-            }else{
+            }
+            else
+            {
                 angleSpeed = Random.Range(0.1f, turnSpeed.x);
             }
 
@@ -92,38 +153,48 @@ public class Ship : MonoBehaviour
 
             transform.Translate(0, 0, moveSpeed * Time.deltaTime);
         }
-        
-        if(transform.position.y > yBounds.y){
+
+        if (transform.position.y > yBounds.y)
+        {
             Vector3 ny = transform.position;
             ny.y = yBounds.y;
             transform.position = ny;
-        }else if(transform.position.y < yBounds.x){
+        }
+        else if (transform.position.y < yBounds.x)
+        {
             Vector3 ny = transform.position;
             ny.y = yBounds.x;
             transform.position = ny;
         }
     }
 
-    int GetNewTarget(){
+    int GetNewTarget()
+    {
         GameObject[] es;
-        if(team == Team.player){
+        if (team == Team.player)
+        {
             es = GameObject.FindGameObjectsWithTag("Enemy");
-        }else{
+        }
+        else
+        {
             es = GameObject.FindGameObjectsWithTag("Player");
         }
         int l = es.Length;
-        if(l == 0){
+        if (l == 0)
+        {
             return 1;
         }
-        
+
         int ind = Random.Range(0, l);
         target = es[ind].GetComponent<Ship>();
         return 0;
     }
 
-    Vector3 CalculatePos(float ang){
+    Vector3 CalculatePos(float ang)
+    {
         Vector3 center = Vector3.zero;
-        if(movementType == MovementType.Target){
+        if (movementType == MovementType.Target)
+        {
             center = target.transform.position;
         }
         Vector3 r = Vector3.zero;
@@ -134,42 +205,66 @@ public class Ship : MonoBehaviour
         return r;
     }
 
-    void ResetTrail(){
+    void ResetTrail()
+    {
         tr.time = otime;
     }
 
-    void Die(){
-        foreach(GameObject g in explosions){
+    void Die()
+    {
+        foreach (GameObject g in explosions)
+        {
             Instantiate(g, transform.position, transform.rotation);
         }
-        if(gameObject.tag == "Enemy"){
+        if (gameObject.tag == "Enemy")
+        {
             GameObject.FindObjectsOfType<GameManager>()[0].GetComponent<GameManager>().EnemyDeath();
         }
         gameObject.SetActive(false);
         Destroy(gameObject);
     }
 
-    public void DealDamage(int d){
-        cHitpoints -= d;
-        if(cHitpoints <= 0){
+    public void DealDamage(int d)
+    {
+        //cHitpoints -= d;
+        CHitPoint -= d;
+        Debug.Log("fill amount is: " + fillAmount);
+        HandleBar();
+
+        if (cHitpoints <= 0)
+        {
             Die();
         }
     }
 
-    public Ship GetRandomTarget(){
+    public Ship GetRandomTarget()
+    {
         GameObject[] es;
-        if(team == Team.player){
+        if (team == Team.player)
+        {
             es = GameObject.FindGameObjectsWithTag("Enemy");
-        }else{
+        }
+        else
+        {
             es = GameObject.FindGameObjectsWithTag("Player");
         }
         int l = es.Length;
-        if(l == 0){
+        if (l == 0)
+        {
             return null;
         }
-        
+
         int ind = Random.Range(0, l);
         Ship t = es[ind].GetComponent<Ship>();
         return t;
+    }
+    private float map(float value, float inMin, float inMax, float outMin, float outMax)
+
+    {
+        return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
+    public void HandleBar()
+    {
+        healthFill.fillAmount = fillAmount;
     }
 }
