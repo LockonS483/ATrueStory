@@ -7,6 +7,9 @@ TagManager:
   - Enemy
   - Manager
   - Missile
+  - UI_Fighter
+  - UI_MFighter
+  - UI_Cruiser
   layers:
   - Default
   - TransparentFX

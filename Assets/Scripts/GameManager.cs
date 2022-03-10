@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
     public float eventChance;
     public Transform eventLocation;
 
+    bool generateShop = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +56,7 @@ public class GameManager : MonoBehaviour
             upgradeMenu.SetActive(false);
             shopMenu.SetActive(false);
             mapGuide.SetActive(false);
+            generateShop = true;
 
             transform.position = Vector3.Lerp(transform.position, battleCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, battleCam.rotation, 0.05f);
@@ -61,6 +64,8 @@ public class GameManager : MonoBehaviour
         // Menu Node
         } else if (inMenu){
             StartCoroutine(LerpFirst());
+            if ((whichMenu == 's') && generateShop) ActivateShopMenu();
+            generateShop = false;
             mapGuide.SetActive(false);
 
             transform.position = Vector3.Lerp(transform.position, menuCam.position, 0.05f);
@@ -72,6 +77,7 @@ public class GameManager : MonoBehaviour
             upgradeMenu.SetActive(false);
             shopMenu.SetActive(false);
             mapGuide.SetActive(true);
+            generateShop= true;
 
             transform.position = Vector3.Lerp(transform.position, mapCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, mapCam.rotation, 0.05f);
@@ -193,6 +199,18 @@ public class GameManager : MonoBehaviour
         if(s <= 2){
             Ship g = Instantiate(playerShips[s], Vector3.zero, Quaternion.identity);
             g.transform.parent = playerFleetObject.transform;
+        }
+    }
+
+    private void ActivateShopMenu(){
+        for (int i=0; i<3; i++){
+            // get random number between 0 and 2
+            //var rnd = new Random();
+            Debug.Log("pointing to: " + shopMenu.transform.GetChild(i).name);
+            int randomizedIndex = Random.Range(0,3);
+
+            // corresponds to slot 1,2,3 and their randomIndex'th child
+            shopMenu.transform.GetChild(i).GetChild(randomizedIndex).gameObject.SetActive(true);
         }
     }
 }
