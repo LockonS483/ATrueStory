@@ -22,6 +22,7 @@ public class ShipLaser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log("laser upgrade: " + upgradeLevel.ToString());
         if(cFireCooldown <= 0){
             Fire();
             return;

@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log("Status: laserUp = " + laserUp.ToString() + ", missileUp = " + missileUp.ToString() + ", healthUp = " + healthUp.ToString());
         // Battle Node
         if(inCombat){
             StopAllCoroutines();
@@ -205,12 +206,56 @@ public class GameManager : MonoBehaviour
     private void ActivateShopMenu(){
         for (int i=0; i<3; i++){
             // get random number between 0 and 2
-            //var rnd = new Random();
-            Debug.Log("pointing to: " + shopMenu.transform.GetChild(i).name);
             int randomizedIndex = Random.Range(0,3);
 
             // corresponds to slot 1,2,3 and their randomIndex'th child
             shopMenu.transform.GetChild(i).GetChild(randomizedIndex).gameObject.SetActive(true);
         }
     }
+
+
+
+    /*************************************************
+    Upgrade Menu Button Click Functions
+    *************************************************/
+
+    // Shields Upgrade (+25hp to all current and future ships)
+    public void ShieldsUpgrade(){
+        healthUp += 25;
+        FinishNode();
+    }
+
+    // Weapons Upgrade (+3 dmg to all Fighter ships)
+    public void WeaponsUpgrade(){
+        // small bump in hp for each
+        healthUp += 5;
+        laserUp += 3;
+        FinishNode();
+    }
+
+    // Missile Upgrade (+3 dmg to all Missile Fighter ships)
+    public void MissileUpgrade(){
+        // small bump in hp for each
+        healthUp += 5;
+        missileUp += 3;
+        FinishNode();
+    }
+
+
+    /*************************************************
+    Shop Menu Button Click Functions
+    *************************************************/
+    public void BuyFighter(){
+        SpawnPlayerShip(0);
+        FinishNode();
+    }
+    public void BuyMFighter(){
+        SpawnPlayerShip(1);
+        FinishNode();
+    }
+    public void BuyCruiser(){
+        SpawnPlayerShip(2);
+        FinishNode();
+    }
+
 }

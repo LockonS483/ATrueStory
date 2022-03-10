@@ -23,6 +23,7 @@ public class ShipMissileArray : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log("missile upgrade: " + upgradeLevel.ToString());
         if(ship.target == null){
             return;
         }
