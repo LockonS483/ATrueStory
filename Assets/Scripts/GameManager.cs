@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject shopMenu;
     public GameObject upgradeMenu;
     public GameObject mapGuide;
+    public GameObject inventoryBar;
 
     public bool inCombat;
     public bool inMenu = false;
@@ -36,6 +37,11 @@ public class GameManager : MonoBehaviour
     public float eventChance;
     public Transform eventLocation;
 
+    private int potentialReward;
+    private int smallShipReward = 10;
+    private int medShipReward = 50;
+    private int lgShipReward = 100;
+
     bool generateShop = true;
 
     // Start is called before the first frame update
@@ -58,6 +64,7 @@ public class GameManager : MonoBehaviour
             shopMenu.SetActive(false);
             mapGuide.SetActive(false);
             generateShop = true;
+            inventoryBar.SetActive(false);
 
             transform.position = Vector3.Lerp(transform.position, battleCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, battleCam.rotation, 0.05f);
@@ -68,6 +75,7 @@ public class GameManager : MonoBehaviour
             if ((whichMenu == 's') && generateShop) ActivateShopMenu();
             generateShop = false;
             mapGuide.SetActive(false);
+            inventoryBar.SetActive(true);
 
             transform.position = Vector3.Lerp(transform.position, menuCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, menuCam.rotation, 0.05f);
@@ -79,6 +87,7 @@ public class GameManager : MonoBehaviour
             shopMenu.SetActive(false);
             mapGuide.SetActive(true);
             generateShop= true;
+            inventoryBar.SetActive(true);
 
             transform.position = Vector3.Lerp(transform.position, mapCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, mapCam.rotation, 0.05f);
@@ -122,6 +131,9 @@ public class GameManager : MonoBehaviour
                 s.hitpoints += healthUp;
                 s.cHitpoints = s.hitpoints;
             }
+
+            potentialReward += (smallShipReward * node.sShips) + (medShipReward * node.mShips) + (lgShipReward * node.lShips);
+            
         // if shop node (menu has to be set at runtime)
         } else if (node.nodeType == MapNode.NodeType.Shop){
             inMenu = true;
@@ -180,6 +192,7 @@ public class GameManager : MonoBehaviour
             s.cHitpoints = s.hitpoints;
         }
         inCombat = false;
+        GlobalVars.money += potentialReward;        // TODO: should check if we won before doing this
         FinishNode();
     }
 
@@ -245,17 +258,28 @@ public class GameManager : MonoBehaviour
     /*************************************************
     Shop Menu Button Click Functions
     *************************************************/
+    // Fighter costs $100
     public void BuyFighter(){
-        SpawnPlayerShip(0);
-        FinishNode();
+        if (GlobalVars.money >= 100){
+            GlobalVars.money -= 100;
+            SpawnPlayerShip(0);
+            FinishNode();            
+        }
     }
+    // Mfighter costs $250
     public void BuyMFighter(){
-        SpawnPlayerShip(1);
-        FinishNode();
+        if (GlobalVars.money >= 250){
+            GlobalVars.money -= 250;
+            SpawnPlayerShip(1);
+            FinishNode();
+        }
     }
+    // Cruiser costs $1000
     public void BuyCruiser(){
-        SpawnPlayerShip(2);
-        FinishNode();
+        if (GlobalVars.money >= 1000){
+            GlobalVars.money -= 1000;
+            SpawnPlayerShip(2);
+            FinishNode();
+        }
     }
-
 }

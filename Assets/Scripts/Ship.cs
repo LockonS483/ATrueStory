@@ -17,6 +17,8 @@ public class Ship : MonoBehaviour
     public Vector2 moveRadiusRange;
     public float moveRadius;
     public float targetAngle = 0;
+    public enum ShipType {Fighter, MFighter, Cruiser};
+    public ShipType whoAmI;
 
     public Ship target;
 

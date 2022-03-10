@@ -57,6 +57,7 @@ MonoBehaviour:
   moveRadiusRange: {x: 20, y: 30}
   moveRadius: 0
   targetAngle: 0
+  whoAmI: 1
   target: {fileID: 0}
   explosions:
   - {fileID: 3389776341276612195, guid: 82b7150a36599ca4bbbc5ed144c1c23c, type: 3}
@@ -186,6 +187,7 @@ MonoBehaviour:
   missile: {fileID: 7695025715658157667, guid: c23cdd4df5bd2a741bf4e7c5c493357d, type: 3}
   firePoints:
   - {fileID: 1265986099408875014}
+  upgradeLevel: 0
 --- !u!1 &1265986099408875009
 GameObject:
   m_ObjectHideFlags: 0

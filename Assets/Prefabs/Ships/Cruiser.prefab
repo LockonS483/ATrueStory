@@ -120,6 +120,7 @@ MonoBehaviour:
   moveRadiusRange: {x: 25, y: 38}
   moveRadius: 0
   targetAngle: 0
+  whoAmI: 2
   target: {fileID: 0}
   explosions:
   - {fileID: 3389776341276612195, guid: 82b7150a36599ca4bbbc5ed144c1c23c, type: 3}
@@ -260,6 +261,7 @@ MonoBehaviour:
   - {fileID: 906449250145171476}
   color: {r: 0, g: 0.84157443, b: 1, a: 1}
   damage: 3
+  upgradeLevel: 0
 --- !u!114 &906449250733923447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +281,7 @@ MonoBehaviour:
   firePoints:
   - {fileID: 906449249416473047}
   - {fileID: 906449250145171476}
+  upgradeLevel: 0
 --- !u!1001 &906449249548084100
 PrefabInstance:
   m_ObjectHideFlags: 0
