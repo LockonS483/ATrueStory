@@ -27,9 +27,9 @@ public class MapGenerator : MonoBehaviour
 
     [Header("Battle Node Config")]
     public int difficultyGap;
-    int sScore = 3;
+    int sScore = 2;
     int mScore = 4;
-    int lScore = 7;
+    int lScore = 6;
     public float smallShipWeight;
     public float mediumShipWeight;
     public float largeShipWeight;
@@ -45,7 +45,7 @@ public class MapGenerator : MonoBehaviour
 
     void GenerateMap(){
         mapLayers = new MapLayer[numLayers];
-        cDifficulty = 1;
+        cDifficulty = 0;
         for(int i=0; i<numLayers; i++){
             GenerateLayer(i);
         }
@@ -58,7 +58,6 @@ public class MapGenerator : MonoBehaviour
             startingy += 3.75f * (mapLayers[j].mapNodes.Length - 1) + (Random.Range(-0.5f, 0.5f));
             layerPos.y = startingy;
             mapLayers[j].transform.localPosition = Vector3.zero;
-            cDifficulty=1;
             for(int k=0; k<mapLayers[j].mapNodes.Length; k++){
                 layerPos.x = startingx + Random.Range(-layerGap/5, layerGap/5);
                 layerPos.y -= Random.Range(5f, 10f);
@@ -75,6 +74,7 @@ public class MapGenerator : MonoBehaviour
         if(l % difficultyGap == 0 && l!=0){
             cDifficulty ++;
         }
+        if(l == numLayers-1) cDifficulty += 2;
         if(l % upGap == 0 && l!=0){
             //is a single upgrade station
             mapLayers[l].mapNodes = new MapNode[1];
@@ -119,7 +119,7 @@ public class MapGenerator : MonoBehaviour
         parentLayer.mapNodes[layerIndex].GetComponent<MapNode>().mapLayer = thisLayer;
         
         int battleScore = 0;
-        int targetScore = Mathf.FloorToInt(cDifficulty * 8f);
+        int targetScore = 6 + Mathf.FloorToInt(cDifficulty * 6f);
         print("generating " + cDifficulty.ToString());
         float gentotal = smallShipWeight + mediumShipWeight + largeShipWeight;
         while(battleScore < targetScore){

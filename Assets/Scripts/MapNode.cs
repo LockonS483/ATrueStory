@@ -23,7 +23,10 @@ public class MapNode : MonoBehaviour
     public bool isClickable;
 
     public Color oc;
+    public Color visitedColor;
     Renderer r;
+
+    public bool visited;
 
     // Start is called before the first frame update
     void Awake()
@@ -35,11 +38,20 @@ public class MapNode : MonoBehaviour
         infoCanvas = gameObject.transform.GetChild(1).gameObject;
         infoText = infoCanvas.gameObject.transform.GetChild(0).gameObject.GetComponent<Text>();
         infoCanvas.SetActive(false);
+        visited = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if(visited){
+            r.material.SetColor("_Color", visitedColor);
+            infoText.text = "";
+            isClickable = false;
+            selectRing.SetActive(false);
+            return;
+        }
         if (GlobalVars.currentLayer == mapLayer){
             isClickable = true;
         } else {
@@ -48,7 +60,7 @@ public class MapNode : MonoBehaviour
         if(!isClickable){
             selectRing.SetActive(false);
             oc = r.material.GetColor("_Color");
-            oc.a = 0.3f;
+            oc.a = 0.45f;
             r.material.SetColor("_Color", oc);
         }else{
             oc = r.material.GetColor("_Color");

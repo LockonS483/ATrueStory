@@ -56,7 +56,7 @@ MonoBehaviour:
   upgradeColor: {r: 0.3638364, g: 1, b: 0, a: 0.8}
   shopColor: {r: 1, g: 0.90058327, b: 0, a: 0.9019608}
   layerGap: 8.6
-  difficultyGap: 3
+  difficultyGap: 2
   smallShipWeight: 35
   mediumShipWeight: 20
   largeShipWeight: 6

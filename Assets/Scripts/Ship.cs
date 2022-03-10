@@ -68,8 +68,6 @@ public class Ship : MonoBehaviour
     private float fillAmount;
 
 
-
-
     TrailRenderer tr;
     float otime;
 
@@ -82,7 +80,6 @@ public class Ship : MonoBehaviour
         //tr.time = otime
         this.HitP = hitpoints;
         this.CHitPoint = cHitpoints;
-
     }
 
     public void InitCombat()
@@ -219,6 +216,10 @@ public class Ship : MonoBehaviour
         if (gameObject.tag == "Enemy")
         {
             GameObject.FindObjectsOfType<GameManager>()[0].GetComponent<GameManager>().EnemyDeath();
+        }else{
+            if(transform.parent.childCount <= 1){
+                GameObject.FindObjectsOfType<GameManager>()[0].GetComponent<GameManager>().LoseGame();
+            }
         }
         gameObject.SetActive(false);
         Destroy(gameObject);
@@ -226,12 +227,13 @@ public class Ship : MonoBehaviour
 
     public void DealDamage(int d)
     {
+        if(cHitpoints <= 0) return;
         //cHitpoints -= d;
         CHitPoint -= d;
         Debug.Log("fill amount is: " + fillAmount);
         HandleBar();
 
-        if (cHitpoints <= 0)
+        if (CHitPoint <= 0)
         {
             Die();
         }

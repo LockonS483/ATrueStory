@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -38,11 +39,17 @@ public class GameManager : MonoBehaviour
     public Transform eventLocation;
 
     private int potentialReward;
-    private int smallShipReward = 10;
+    private int smallShipReward = 25;
     private int medShipReward = 50;
-    private int lgShipReward = 100;
+    private int lgShipReward = 150;
 
     bool generateShop = true;
+
+    public GameObject[] shopCards;
+    public GameObject endCard;
+    public int numLayers;
+
+    public string loseSceneName = "LoseScene";
 
     // Start is called before the first frame update
     void Start()
@@ -51,6 +58,7 @@ public class GameManager : MonoBehaviour
         inCombat = false;
         visitedNodes = new Vector3[10];
         lr = GetComponent<LineRenderer>();
+        GlobalVars.money += 100;
     }
 
     // Update is called once per frame
@@ -68,7 +76,6 @@ public class GameManager : MonoBehaviour
 
             transform.position = Vector3.Lerp(transform.position, battleCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, battleCam.rotation, 0.05f);
-        
         // Menu Node
         } else if (inMenu){
             StartCoroutine(LerpFirst());
@@ -96,6 +103,7 @@ public class GameManager : MonoBehaviour
 
     public void NodeClick(MapNode node){
         // if battle node
+        node.visited = true;
         if (node.nodeType == MapNode.NodeType.Battle){
             inCombat = true;
             GameObject[] pfleetGo = GameObject.FindGameObjectsWithTag("Player");
@@ -191,7 +199,7 @@ public class GameManager : MonoBehaviour
             s.hitpoints -= healthUp;
             s.cHitpoints = s.hitpoints;
         }
-        inCombat = false;
+        
         GlobalVars.money += potentialReward;        // TODO: should check if we won before doing this
         FinishNode();
     }
@@ -200,7 +208,16 @@ public class GameManager : MonoBehaviour
         inCombat = false;
         inMenu = false;
 
+        
+        foreach(GameObject g in shopCards){
+            g.SetActive(false);
+        }
+
         //event stuff
+        if(GlobalVars.currentLayer == numLayers ){
+            endCard.SetActive(true);
+            return;
+        }
         float roll = Random.Range(0f, 100f);
         if(roll <= eventChance){
             int eventind = Random.Range(0, eventPrefabs.Length);
@@ -219,8 +236,20 @@ public class GameManager : MonoBehaviour
     private void ActivateShopMenu(){
         for (int i=0; i<3; i++){
             // get random number between 0 and 2
-            int randomizedIndex = Random.Range(0,3);
+            float sWeight = 40;
+            float mWeight = 35;
+            float lWeight = 20;
+            float totalWeight = sWeight+mWeight+lWeight;
 
+            float randWeight = Random.Range(0, totalWeight);
+            int randomizedIndex = 0;
+            if(randWeight < sWeight){
+                randomizedIndex = 0;
+            }else if(randWeight <= sWeight+mWeight){
+                randomizedIndex = 1;
+            }else{
+                randomizedIndex = 2;
+            }
             // corresponds to slot 1,2,3 and their randomIndex'th child
             shopMenu.transform.GetChild(i).GetChild(randomizedIndex).gameObject.SetActive(true);
         }
@@ -241,8 +270,8 @@ public class GameManager : MonoBehaviour
     // Weapons Upgrade (+3 dmg to all Fighter ships)
     public void WeaponsUpgrade(){
         // small bump in hp for each
-        healthUp += 5;
-        laserUp += 3;
+        healthUp += 10;
+        laserUp += 1;
         FinishNode();
     }
 
@@ -250,7 +279,7 @@ public class GameManager : MonoBehaviour
     public void MissileUpgrade(){
         // small bump in hp for each
         healthUp += 5;
-        missileUp += 3;
+        missileUp += 2;
         FinishNode();
     }
 
@@ -285,5 +314,9 @@ public class GameManager : MonoBehaviour
 
     public void CloseMenu(){
         FinishNode();
+    }
+
+    public void LoseGame(){
+        SceneManager.LoadScene(loseSceneName, LoadSceneMode.Single);
     }
 }

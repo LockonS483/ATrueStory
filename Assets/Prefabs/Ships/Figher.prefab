@@ -49,8 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f5e73d29f31938428187828a53c5d78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitpoints: 80
-  cHitpoints: 80
+  hitpoints: 90
+  cHitpoints: 90
   team: 0
   movementType: 1
   angleSpeedRange: {x: 0, y: 0}
@@ -83,7 +83,7 @@ MonoBehaviour:
   firePoints:
   - {fileID: 6907876533304644207}
   color: {r: 0, g: 0.85000014, b: 1, a: 1}
-  damage: 10
+  damage: 8
   upgradeLevel: 0
 --- !u!96 &6907876533214880285
 TrailRenderer:

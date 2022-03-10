@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a97248424d1aa7409b91e5887410c1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireCooldown: 5
+  fireCooldown: 4
   swarmDelay: 0.08
   missileCount: 8
   missile: {fileID: 7695025715658157667, guid: c23cdd4df5bd2a741bf4e7c5c493357d, type: 3}

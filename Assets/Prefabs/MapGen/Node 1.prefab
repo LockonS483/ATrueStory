@@ -119,6 +119,8 @@ MonoBehaviour:
   reward: 0
   isClickable: 0
   oc: {r: 0, g: 0, b: 0, a: 0}
+  visitedColor: {r: 1, g: 1, b: 1, a: 1}
+  visited: 0
 --- !u!1 &7147754950874327639
 GameObject:
   m_ObjectHideFlags: 0
