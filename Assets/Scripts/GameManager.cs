@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject shopMenu;
     public GameObject upgradeMenu;
+    public GameObject mapGuide;
 
     public bool inCombat;
     public bool inMenu = false;
@@ -47,22 +48,30 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Battle Node
         if(inCombat){
             StopAllCoroutines();
             upgradeMenu.SetActive(false);
             shopMenu.SetActive(false);
+            mapGuide.SetActive(false);
 
             transform.position = Vector3.Lerp(transform.position, battleCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, battleCam.rotation, 0.05f);
+        
+        // Menu Node
         } else if (inMenu){
             StartCoroutine(LerpFirst());
+            mapGuide.SetActive(false);
 
             transform.position = Vector3.Lerp(transform.position, menuCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, menuCam.rotation, 0.05f);
+        
+        // Map view
         }else{
             StopAllCoroutines();
             upgradeMenu.SetActive(false);
             shopMenu.SetActive(false);
+            mapGuide.SetActive(true);
 
             transform.position = Vector3.Lerp(transform.position, mapCam.position, 0.05f);
             transform.rotation = Quaternion.Lerp(transform.rotation, mapCam.rotation, 0.05f);
